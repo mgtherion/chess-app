@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { BoardComponent } from '../board/board.component';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'chess-row',
@@ -8,9 +7,13 @@ import { BoardComponent } from '../board/board.component';
 })
 export class RowComponent implements OnInit {
 
-  cells: string[];
-  constructor(boardComponent: BoardComponent) {
-    this.cells = ['', '', '', '', '', '', '', '', '', '']
+  @Input()
+  index: number;
+
+  @Input()
+  row: any[];
+
+  constructor() {
   }
 
   ngOnInit() {
