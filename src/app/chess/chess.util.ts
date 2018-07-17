@@ -37,8 +37,7 @@ export function generateEmptyBoard(): Board {
             () => {
               return {
                 content: 'empty',
-                status: 'none',
-                color: 'none'
+                status: 'none'
               };
             }
           )
@@ -110,4 +109,19 @@ export function contain(actions: Coords[], row: number, col: number): boolean {
     }
   }
   return false;
+}
+
+export function saveData(board: Board, team: Team): void {
+  localStorage.setItem('chessData',
+    JSON.stringify({board: board, team: team}));
+}
+
+export function resetData(): Board {
+  localStorage.setItem('chessData', '');
+  return fillBoard(generateEmptyBoard());
+}
+
+export function loadData() {
+  let data = localStorage.getItem('chessData');
+  return data.length? JSON.parse(data): '';
 }

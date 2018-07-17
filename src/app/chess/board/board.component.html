@@ -1,4 +1,10 @@
-<chess-menu></chess-menu>
+<chess-menu
+  [turnOrder]="currentTurn"
+  (onSave)="onSave($event)"
+  (onLoad)="onLoad($event)"
+  (onReset)="onReset($event)">
+
+  </chess-menu>
 <div class="board">
   <div
     class="row"

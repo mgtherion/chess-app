@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { getHandlerByName } from '../pieces';
-import { generateBoard, contain,
+import { generateBoard, contain, saveData, loadData, resetData,
   Cell, Board, Status, Content, Coords, Team } from '../chess.util';
 
 
@@ -21,8 +21,10 @@ export class BoardComponent implements OnInit {
   board: Board;
   currentTurn: Team;
   ngOnInit(): void {
-    this.board = generateBoard();
-    this.currentTurn = Team.white;
+    if (!this.onLoad()) {
+      this.board = generateBoard();
+      this.currentTurn = Team.white;
+    }
   }
 
   onClick(row: number, col:number): void {
@@ -147,5 +149,25 @@ export class BoardComponent implements OnInit {
     this.currentTurn =
       this.currentTurn == Team.white?
         Team.black: Team.white;
+  }
+
+  onSave(): void {
+    this.hideActions();
+    saveData(this.board, this.currentTurn);
+  }
+
+  onLoad(): boolean {
+    let data = loadData();
+    if (!data) return false;
+    this.board = data.board;
+    this.currentTurn = data.team;
+    this.hideActions();
+    return true;
+  }
+
+  onReset(): void {
+    this.board = resetData();
+    this.currentTurn = Team.white;
+    this.hideActions();
   }
 }
