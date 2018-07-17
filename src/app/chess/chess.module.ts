@@ -4,6 +4,7 @@ import { BoardComponent } from './board/board.component';
 import { RowComponent } from './row/row.component';
 import { CellComponent } from './cell/cell.component';
 import { ChessRoutingModule } from './chess-routing.module';
+import { MenuComponent } from './menu/menu.component';
 
 @NgModule({
   imports: [
@@ -13,7 +14,8 @@ import { ChessRoutingModule } from './chess-routing.module';
   declarations: [
     BoardComponent,
     RowComponent,
-    CellComponent
+    CellComponent,
+    MenuComponent
   ],
   providers: [
 

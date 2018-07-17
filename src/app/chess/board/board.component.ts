@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { generateBoard, contain, Cell, Board, Status, Content, Coords } from '../chess.util';
-import { getPawnActions } from '../pieces';
+import { getHandlerByName } from '../pieces';
+import { generateBoard, contain,
+  Cell, Board, Status, Content, Coords, Team } from '../chess.util';
+
 
 @Component({
   selector: 'chess-board',
@@ -8,8 +10,6 @@ import { getPawnActions } from '../pieces';
   styleUrls: ['./board.component.css']
 })
 export class BoardComponent implements OnInit {
-
-  constructor() {}
 
   selectedPiece: string = '';
   selectedCoords: number[] = [];
@@ -19,8 +19,10 @@ export class BoardComponent implements OnInit {
   attacks: Coords[] = [];
 
   board: Board;
+  currentTurn: Team;
   ngOnInit(): void {
     this.board = generateBoard();
+    this.currentTurn = Team.white;
   }
 
   onClick(row: number, col:number): void {
@@ -39,6 +41,7 @@ export class BoardComponent implements OnInit {
         this.board[row][col] = clickedCell;
         this.clearOriginCell();
         this.hideActions();
+        this.toggleTurn();
         return;
     }
 
@@ -48,7 +51,13 @@ export class BoardComponent implements OnInit {
       return;
     }
 
-    //only one case left -> new piece selecting and highlighting its actions
+    //wrong turn handling
+    if (clickedCell.content !== Content.empty &&
+      clickedCell.content.charAt(0) !== this.currentTurn) {
+      return;
+    }
+
+    //only one case left -> new piece select and highlight its actions
     this.selectPiece(row, col);
     this.getActions(row, col);
   }
@@ -61,8 +70,8 @@ export class BoardComponent implements OnInit {
 
   //get actions from piece handlers and highlight all actions
   getActions(row: number, col: number): void {
-    //TODO not only pawn
-    let actions = getPawnActions(this.selectedPiece, [row, col]);
+
+    let actions = getHandlerByName(this.selectedPiece)(row, col);
     this.showMoves(actions.moves);
     this.showAttacks(actions.attacks);
   }
@@ -132,5 +141,11 @@ export class BoardComponent implements OnInit {
     target.status = Status.none;
     target.content = Content.empty;
     this.board[row][col] = target;
+  }
+
+  toggleTurn(): void {
+    this.currentTurn =
+      this.currentTurn == Team.white?
+        Team.black: Team.white;
   }
 }

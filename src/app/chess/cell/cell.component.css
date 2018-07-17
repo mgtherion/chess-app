@@ -29,3 +29,10 @@
   background-image: url(/assets/w_pawn.svg);
 }
 
+.b-knight {
+  background-image: url(/assets/b_knight.svg);
+}
+
+.w-knight {
+  background-image: url(/assets/w_knight.svg);
+}
