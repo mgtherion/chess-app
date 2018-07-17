@@ -53,7 +53,6 @@ export function fillBoard(board: Board): Board {
     board[0][i].content = Content.bKnight;
   }
 
-  board[1][0].content = Content.bPawn;
   board[5][5].content = Content.wPawn;
   board[6][5].content = Content.wPawn;
   board[5][4].content = Content.bPawn;

@@ -1,15 +1,19 @@
 
 .board {
-  position: relative;
-  width: 50vw;
-  height: 50vw;
+  width:100vmin;
+  height: 100vmin;
+  margin: auto;
   border: 1px solid black;
-  min-width: 400px;
-  min-height: 400px;
+  box-sizing: border-box;
 }
 
 .row {
   height: 10%;
   width: 100%;
   overflow: hidden;
+}
+
+.menu {
+  position: absolute;
+  right: 10px;
 }
