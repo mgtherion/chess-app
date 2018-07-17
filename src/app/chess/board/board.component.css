@@ -1,0 +1,15 @@
+
+.board {
+  position: relative;
+  width: 50vw;
+  height: 50vw;
+  border: 1px solid black;
+  min-width: 400px;
+  min-height: 400px;
+}
+
+.row {
+  height: 10%;
+  width: 100%;
+  overflow: hidden;
+}

@@ -8,12 +8,16 @@ import { LogicService } from '../logic.service';
 })
 export class BoardComponent implements OnInit {
 
-  rows: any[];
+  board: any[];
   constructor(logic: LogicService) {
-    this.rows = logic.getBoard();
+    this.board = logic.getBoard();
   }
 
   ngOnInit() {
+  }
+
+  onClick(col, row) {
+    console.log('TEMP', col, row);
   }
 
 }

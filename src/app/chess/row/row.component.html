@@ -1,7 +1,9 @@
-row - {{index}}
-<ul>
-  <li *ngFor="let cell of row; let i = index">
-    <chess-cell [data]="cell" [index]="i"></chess-cell>
-  </li>
-</ul>
+
+<div class="cell" *ngFor="let cell of row; let i = index">
+  <chess-cell
+    [data]="cell"
+    [index]="i">
+  </chess-cell>
+</div>
+
 

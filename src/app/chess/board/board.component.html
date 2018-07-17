@@ -1,6 +1,6 @@
-<ul>
-  <li *ngFor="let row of rows; let i = index">
+<div class="board">
+  <div class="row" *ngFor="let row of board; let i = index">
     <chess-row [row]="row" [index]="i"></chess-row>
-  </li>
-</ul>
+  </div>
+</div>
 
