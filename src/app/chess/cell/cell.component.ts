@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { RowComponent } from '../row/row.component';
 import { BoardComponent } from '../board/board.component';
+import { Cell, Status, Content } from '../chess.util';
 
 @Component({
   selector: 'chess-cell',
@@ -16,17 +17,24 @@ export class CellComponent implements OnInit {
   index: number;
 
   @Input()
-  data: any;
+  data: Cell;
 
-  constructor(public row: RowComponent, public board: BoardComponent) {}
+  constructor(
+    public rowComponent: RowComponent,
+    public boardComponent: BoardComponent) {}
 
-  public content;
-  ngOnInit() {
+  public content: Content;
+  public status: Status;
+  ngOnInit(): void {
     this.content = this.data.content;
+    this.status = this.data.status;
   }
 
-  onClick() {
-    this.board.onClick(this.index, this.row.index);
+  onClick(): void {
+    this.boardComponent.onClick(
+      this.rowComponent.index,
+      this.index
+     );
   }
 
 }

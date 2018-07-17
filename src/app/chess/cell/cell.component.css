@@ -3,3 +3,25 @@
   height: 100%;
 }
 
+.cell-content.selected {
+  background-color: #FEC079;
+}
+
+.cell-content.highlighted {
+  background-color: #FED29F;
+}
+
+.cell-content:not(.empty) {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.b-pawn {
+  background-image: url(/assets/b_pawn.svg);
+}
+
+.w-pawn {
+  background-image: url(/assets/w_pawn.svg);
+}
+

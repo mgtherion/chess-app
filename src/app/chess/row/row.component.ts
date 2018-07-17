@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Row } from '../chess.util';
 
 @Component({
   selector: 'chess-row',
@@ -11,7 +12,7 @@ export class RowComponent implements OnInit {
   index: number;
 
   @Input()
-  row: any[];
+  row: Row;
 
   constructor() {
   }
