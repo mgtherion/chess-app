@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { generateBoard, Cell, Board, Status, Content } from '../chess.util';
+import { generateBoard, contain, Cell, Board, Status, Content, Coords } from '../chess.util';
+import { getPawnActions } from '../pieces';
 
 @Component({
   selector: 'chess-board',
@@ -10,7 +11,12 @@ export class BoardComponent implements OnInit {
 
   constructor() {}
 
-  selected: number[] = [];
+  selectedPiece: string = '';
+  selectedCoords: number[] = [];
+
+  //possible actions
+  moves: Coords[] = [];
+  attacks: Coords[] = [];
 
   board: Board;
   ngOnInit(): void {
@@ -18,51 +24,113 @@ export class BoardComponent implements OnInit {
   }
 
   onClick(row: number, col:number): void {
-    //missclick
-    if (this.getCell(row, col).content === Content.empty &&
-      this.selected.length === 0) {
+    let clickedCell = this.getCell(row, col);
+    //no pieces was selected and empty space clicked -> missclick
+    if (clickedCell.content === Content.empty &&
+      !this.selectedPiece.length) {
       return;
     }
 
-    //deselect previous
-    if (this.selected.length) {
-      this.deselect();
-
-      //second click cancels selection
-      if (this.selected[0] === row &&
-          this.selected[1] === col) {
-        this.selected = [];
+    //piece already selected -> possible attack or move
+    if (this.selectedPiece.length &&
+      contain(this.attacks.concat(this.moves), row, col)) {
+        clickedCell.content = this.selectedPiece as Content;
+        clickedCell.status = Status.none;
+        this.board[row][col] = clickedCell;
+        this.clearOriginCell();
+        this.hideActions();
         return;
-      }
     }
 
-    //select new
-    this.select(row, col);
+    //not action but piece was selected -> deselect all
+    if (this.selectedPiece.length) {
+      this.hideActions();
+      return;
+    }
 
-    //show moves
-    this.showMoves();
+    //only one case left -> new piece selecting and highlighting its actions
+    this.selectPiece(row, col);
+    this.getActions(row, col);
   }
 
-  deselect(): void {
-    let [row, col] = this.selected;
-    let cell = this.getCell(row, col);
-    cell.status = Status.none;
-    this.board[row][col] = cell;
+  selectPiece(row: number, col: number): void {
+    let cell = this.markCell(row, col, Status.selected);
+    this.selectedCoords = [row, col];
+    this.selectedPiece = cell.content;
   }
 
-  select(row: number, col: number): void {
-    let cell = this.getCell(row, col);
-    cell.status = Status.selected;
-    this.board[row][col] = cell;
-    this.selected = [row, col];
+  //get actions from piece handlers and highlight all actions
+  getActions(row: number, col: number): void {
+    //TODO not only pawn
+    let actions = getPawnActions(this.selectedPiece, [row, col]);
+    this.showMoves(actions.moves);
+    this.showAttacks(actions.attacks);
   }
 
-  showMoves() {
+  showMoves(moves: Coords[]): void {
+    this.moves = [];
+    moves.map((moveCoord: Coords) => {
+      let [row, col] = moveCoord;
+      let target = this.getCell(row, col);
+      if (target.content == 'empty') {
+        this.moves.push([row, col]);
+        this.markCell(row, col, Status.highlighted);
+      }
+    });
+  }
 
+  showAttacks(attacks: Coords[]): void {
+    this.attacks = [];
+    attacks.map((attackCoord: Coords) => {
+      let [row, col] = attackCoord;
+      let target = this.getCell(row, col);
+
+      if (target.content !== 'empty' &&
+        //different charAt(0) means opponent piece
+        target.content.charAt(0) !== this.selectedPiece.charAt(0)) {
+        this.attacks.push([row, col]);
+        this.markCell(row, col, Status.vulnerable);
+      }
+    });
+  }
+
+  hideActions(): void {
+    //de-highlight all cells with actions
+    this.moves
+        .concat(this.attacks)
+        .map((actionCoord: Coords) => {
+          let [row, col] = actionCoord;
+          this.markCell(row, col, Status.none);
+        });
+    //de-highlight selected cell
+    if (this.selectedCoords.length){
+      let [row, col] = this.selectedCoords;
+      this.markCell(row, col, Status.none);
+    }
+    //reset variables
+    this.selectedPiece = '';
+    this.selectedCoords = [];
+    this.moves = [];
+    this.attacks = [];
   }
 
   getCell(row: number, col: number): Cell {
+    //angular only will notice deep change if cell is a new object
     return Object.assign({}, this.board[row][col]);
   }
 
+  markCell(row: number, col: number, status: Status): Cell {
+    let target = this.getCell(row, col);
+    target.status = status;
+    this.board[row][col] = target;
+    return target;
+  }
+
+  clearOriginCell(): void {
+    let [row, col] = this.selectedCoords;
+    let target = this.getCell(row, col);
+    target.status = Status.none;
+    target.content = Content.empty;
+    this.board[row][col] = target;
+  }
 }

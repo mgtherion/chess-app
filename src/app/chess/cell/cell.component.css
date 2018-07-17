@@ -11,6 +11,10 @@
   background-color: #FED29F;
 }
 
+.cell-content.vulnerable {
+  background-color: #FE5F5F;
+}
+
 .cell-content:not(.empty) {
   background-size: cover;
   background-repeat: no-repeat;

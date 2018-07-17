@@ -16,6 +16,7 @@ import { ChessRoutingModule } from './chess-routing.module';
     CellComponent
   ],
   providers: [
+
   ]
 })
 export class ChessModule { }
