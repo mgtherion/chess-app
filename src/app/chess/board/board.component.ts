@@ -66,23 +66,26 @@ export class BoardComponent implements OnInit {
 
   selectPiece(row: number, col: number): void {
     let cell = this.markCell(row, col, Status.selected);
+
     this.selectedCoords = [row, col];
     this.selectedPiece = cell.content;
   }
 
   //get actions from piece handlers and highlight all actions
   getActions(row: number, col: number): void {
-
     let actions = getHandlerByName(this.selectedPiece)(row, col);
+
     this.showMoves(actions.moves);
     this.showAttacks(actions.attacks);
   }
 
   showMoves(moves: Coords[]): void {
     this.moves = [];
+
     moves.map((moveCoord: Coords) => {
       let [row, col] = moveCoord;
       let target = this.getCell(row, col);
+
       if (target.content == 'empty') {
         this.moves.push([row, col]);
         this.markCell(row, col, Status.highlighted);
@@ -92,6 +95,7 @@ export class BoardComponent implements OnInit {
 
   showAttacks(attacks: Coords[]): void {
     this.attacks = [];
+
     attacks.map((attackCoord: Coords) => {
       let [row, col] = attackCoord;
       let target = this.getCell(row, col);
@@ -113,11 +117,13 @@ export class BoardComponent implements OnInit {
           let [row, col] = actionCoord;
           this.markCell(row, col, Status.none);
         });
+
     //de-highlight selected cell
     if (this.selectedCoords.length){
       let [row, col] = this.selectedCoords;
       this.markCell(row, col, Status.none);
     }
+
     //reset variables
     this.selectedPiece = '';
     this.selectedCoords = [];
@@ -134,6 +140,7 @@ export class BoardComponent implements OnInit {
     let target = this.getCell(row, col);
     target.status = status;
     this.board[row][col] = target;
+
     return target;
   }
 
@@ -153,21 +160,25 @@ export class BoardComponent implements OnInit {
 
   onSave(): void {
     this.hideActions();
+
     saveData(this.board, this.currentTurn);
   }
 
   onLoad(): boolean {
+    this.hideActions();
+
     let data = loadData();
     if (!data) return false;
+
     this.board = data.board;
     this.currentTurn = data.team;
-    this.hideActions();
     return true;
   }
 
   onReset(): void {
+    this.hideActions();
+
     this.board = resetData();
     this.currentTurn = Team.white;
-    this.hideActions();
   }
 }
