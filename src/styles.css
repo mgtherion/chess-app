@@ -6,3 +6,17 @@
 .even-row .cell:nth-child(even) {
   background-color: #CCC;
 }
+
+body {
+  margin: 0;
+}
+
+html, body, app-root, app-root > div {
+  height: 100%;
+  display: block;
+}
+
+chess-board {
+  height: 100%;
+  display: flex;
+}
