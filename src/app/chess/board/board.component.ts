@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LogicService } from '../logic.service';
+import { generateEmptyBoard } from '../chess.util';
 
 @Component({
   selector: 'chess-board',
@@ -8,12 +8,11 @@ import { LogicService } from '../logic.service';
 })
 export class BoardComponent implements OnInit {
 
-  board: any[];
-  constructor(logic: LogicService) {
-    this.board = logic.getBoard();
-  }
+  constructor() {}
 
+  board: any[];
   ngOnInit() {
+    this.board = generateEmptyBoard();
   }
 
   onClick(col, row) {

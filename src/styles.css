@@ -1,1 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+.odd-row .cell:nth-child(odd) {
+  background-color: #CCC;
+}
+
+.even-row .cell:nth-child(even) {
+  background-color: #CCC;
+}
